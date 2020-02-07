@@ -1,7 +1,7 @@
-import React,{ Fragment, useContext } from 'react';
+import React,{ Fragment,useContext } from 'react';
 import { FlatList,Text,StyleSheet } from 'react-native';
 import ContextLans from '../context/ProviderLans';
-import { Card } from './Card';
+import {Card} from './Card';
 import Panel from './Panel';
 
 export default (props) => {
@@ -14,7 +14,7 @@ export default (props) => {
                 style={{paddingTop:50}}
                 data={savedItems}
                 keyExtractor={(_el,index) => index.toString()}
-                renderItem={({item}) => <Card text={item} />} />
+                renderItem={({item}) => <Card data={item} />} />
             <Panel screen={props.navigation.navigate}/>
         </Fragment>
     )

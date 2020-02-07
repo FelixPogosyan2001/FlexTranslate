@@ -1,29 +1,44 @@
-import React,{Fragment,useContext,useState} from 'react';
+import React,{ Fragment,useContext,useState,useEffect } from 'react';
 import { 
     StyleSheet,
     Text,
     View,
     TextInput,
     TouchableHighlight,
-    FlatList
+    FlatList,
+    AsyncStorage
 } from 'react-native';
 import Switch from './LanguageNavigate'
-import { Card } from './Card';
+import {Card} from './Card';
 import ContextLans from '../context/ProviderLans';
 import Empty from './Empty';
 import Panel from './Panel';
 import Loader from './Loader';
+import {Translation} from '../constructor-translate';
 
 export const Home = (props) => {
     const [value,setValue] = useState('');
-    const [addedItems,addItem] = useState([]);
+    const [addedItems,updateAddedItems] = useState([]);
     const [loading,changeLoading] = useState(false);
     const {lans} = useContext(ContextLans);
+    
+    useEffect(() => {
+        (async () => {
+            let result = await AsyncStorage.getItem('history');
+            if (result !== null) updateAddedItems(JSON.parse(result));
+        })()
+    },[]);
+
+    useEffect(() => {
+        if (addedItems.length > 0) {
+            AsyncStorage.setItem('history',JSON.stringify(addedItems));
+        }
+    },[addedItems]);
 
     const translateText = async () => {
         try {
             changeLoading(true);
-            const response = await fetch(`https://ca2ef1cb.ngrok.io/translate`,{
+            const response = await fetch(`https://f56ac03c.ngrok.io/translate`,{
               headers: { 'Content-Type': 'application/json' },
               method: 'POST',
               body: JSON.stringify({
@@ -33,8 +48,9 @@ export const Home = (props) => {
               })
             });
             const text = await response.text();
+            const item = new Translation(value,text);
             changeLoading(false);
-            addItem([...addedItems,text]);
+            updateAddedItems([...addedItems,item]);
             setValue('');
         } catch(e){
             throw new Error(e);
@@ -63,7 +79,7 @@ export const Home = (props) => {
                 data={addedItems} 
                 extraData={addedItems}
                 keyExtractor={(_item,index) => index.toString()}
-                renderItem={({item}) => <Card text={item} />}/>}
+                renderItem={({item}) => <Card data={item} />}/>}
             <Panel screen={props.navigation.navigate}/>
         </Fragment>
     )

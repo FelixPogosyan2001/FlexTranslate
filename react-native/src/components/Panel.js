@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,StyleSheet,Text,Dimensions } from 'react-native'
+import { View,StyleSheet,Dimensions } from 'react-native'
 import {withNavigation} from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconAwesome from 'react-native-vector-icons/FontAwesome';

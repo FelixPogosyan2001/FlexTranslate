@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from 'react';
-import { View,Text,StyleSheet,Image,TouchableHighlight } from 'react-native';
+import { View,Text,StyleSheet,Image,TouchableOpacity } from 'react-native';
 import { Verbose } from './Verbose';
 
 export const Book = ({image,name,author,pages,desc,date}) => {
@@ -19,11 +19,9 @@ export const Book = ({image,name,author,pages,desc,date}) => {
                 <Text style={{fontWeight: 'bold'}}>{correctlyName ? correctlyName : name}</Text>
                 <Text style={{marginTop: 5,opacity: 0.6}}>{author}</Text>
             </View>
-            <TouchableHighlight onPress={() => setMoreInfo(true)} style={styles.btnMore}>
-                <View style={styles.wrapped}>
-                    <Text style={styles.textBtn}>Learn More</Text>
-                </View>
-            </TouchableHighlight>
+            <TouchableOpacity onPress={() => setMoreInfo(true)} style={styles.btnMore}>
+                <Text style={styles.textBtn}>Learn More</Text>
+            </TouchableOpacity>
             {moreInfo && <Verbose data={{image,author,pages,name,desc,date}} close={setMoreInfo} />}
         </View>
     )
@@ -55,9 +53,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     btnMore: {
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: '#080793',
+        justifyContent: 'center',
+        height: 35,
+        paddingHorizontal: 8,
+        borderRadius: 4,
+        shadowColor: '#080793',
+        shadowOpacity: 0.6,
+        shadowRadius: 5,
+        alignSelf: 'flex-end'
     },
     wrapped: {
         backgroundColor: '#080793',

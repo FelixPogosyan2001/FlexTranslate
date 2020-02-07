@@ -3,31 +3,47 @@ import { View,Text,StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ContextLans from '../context/ProviderLans';
 
-export const Card = ({text}) => {
+export const Card = ({data}) => {
     const {savedItems,updateItems} = useContext(ContextLans);
     const [isActive,setMode] = useState(false);
 
     useEffect(() => {
-        if (savedItems.includes(text)) {
-            setMode(true);
-        }
-    },[]);
-
-    const addToFavorite = () => {
-        if (!savedItems.includes(text)) {
-            updateItems([...savedItems,text]);
+        if (savedItems.findIndex(el => el.id === data.id) != -1) {
             setMode(true);
         } else {
-            let newItems = [...savedItems];
-            newItems.splice(savedItems.indexOf(text),1)
-            updateItems(newItems);
             setMode(false);
+        }
+    },[savedItems]);
+
+    const addToFavorite = () => {
+        let index = savedItems.findIndex(el => el.id === data.id);
+
+        if (index == -1) {
+            updateItems([...savedItems,data]);
+        } else {
+            let newItems = [...savedItems];
+            newItems.splice(index,1)
+            updateItems(newItems);
+        } 
+    }
+
+    const split = (str) => {
+        let short = null;
+
+        if (str.length > 30) {
+            short = `${str.slice(0,29)}...`;
+            return short 
+        } else {
+            return str;
         }
     }
 
     return (
         <View style={styles.li}>
-             <Text style={styles.translatedText}>{text}</Text>
+             <View style={{width:'90%'}}>
+                <Text style={{fontWeight: 'bold'}}>{split(data.text)}</Text>
+                <Text style={styles.translatedText}>{split(data.translatedText)}</Text>
+             </View>
              <Icon onPress={() => addToFavorite()} name="star" style={{fontSize: 20,color: isActive ? '#e4e400' : 'black'}} />
         </View>
     )
@@ -36,7 +52,7 @@ export const Card = ({text}) => {
 const styles = StyleSheet.create({
     li: {
         backgroundColor: 'white',
-        height: 60,
+        minHeight: 60,
         width: '80%',
         shadowColor: 'black',
         shadowRadius: 5,
@@ -45,12 +61,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         paddingHorizontal: 10,
+        paddingVertical: 10,
         borderColor: 'silver',
         borderBottomWidth: 1,
         marginBottom: 16,
         flexDirection: 'row'
     },
     translatedText: {
-        fontWeight: 'bold'
+        color: '#737373',
+        fontWeight: 'bold',
+        marginTop: 5
     }
 })

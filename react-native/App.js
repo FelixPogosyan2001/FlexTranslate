@@ -1,8 +1,7 @@
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { StyleSheet,View,Modal } from 'react-native';
-import { Header } from './src/components/Header'
+import { StyleSheet,View,Modal,AsyncStorage,SafeAreaView } from 'react-native';
 import { InitialTemplate } from './src/components/InitialTemplate'
 import ContextLans from './src/context/ProviderLans';
 import { Home } from './src/components/Home';
@@ -19,7 +18,7 @@ const Navigator = createStackNavigator(
     initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#080793' // #080793 #9c16db
+        backgroundColor: '#080793'
       },
       headerTitle: 'FlexTranslate',
       headerShown: true,
@@ -40,8 +39,25 @@ const App = (props) => {
   const [savedItems,updateItems] = useState([]);
   const [lans,setLans] = useState([{key: 'en',value: 'English'},{key: 'ru',value: 'Russian'}]);
 
+  useEffect(() => {
+    (async () => {
+      let result = await AsyncStorage.getItem('collection');
+      let isLogged = await AsyncStorage.getItem('start');
+
+      if (result !== null) updateItems(JSON.parse(result));
+      if (!JSON.parse(isLogged)) AsyncStorage.setItem('start',JSON.stringify(true))
+      else if (JSON.parse(isLogged)) setStart(true);
+    })()
+  },[]);
+
+  useEffect(() => {
+    if (savedItems.length > 0) {
+      AsyncStorage.setItem('collection',JSON.stringify(savedItems));
+    }
+  },[savedItems]);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {started ? (
         <ContextLans.Provider value={{lans,setLans,savedItems,updateItems}}>
             <Modal visible={started} animationType='slide'>
@@ -49,7 +65,7 @@ const App = (props) => {
             </Modal>
         </ContextLans.Provider>
       ): <InitialTemplate setStart={setStart} />}
-    </View>
+    </SafeAreaView>
   );
 }
 

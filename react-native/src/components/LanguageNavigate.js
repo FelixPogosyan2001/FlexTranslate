@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     lan: {
         flex: 2,
-        backgroundColor: '#079378', //#e0e0e0
+        backgroundColor: '#930776',
         textAlign: 'center',
         paddingVertical: 8,
         color: '#070689',
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     swc: {
         flex: 1,
         textAlign: 'center',
-        backgroundColor: '#930776',
+        backgroundColor: '#3e9307',
         color: 'white',
         fontSize: 30,
         paddingVertical: 3

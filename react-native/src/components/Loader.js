@@ -14,7 +14,7 @@ export default ({exist}) => {
 const styles = StyleSheet.create({
     loader: {
         position: 'absolute',
-        top: Dimensions.get('window').height / 2,
+        top: Dimensions.get('window').height / 2 - 50,
         left: '45%',
         right: '45%'
     }

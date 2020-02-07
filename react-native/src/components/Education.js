@@ -5,7 +5,7 @@ import {Book} from './Book';
 import Loader from './Loader';
 
 const Education = (props) => {
-    const url = 'https://www.googleapis.com/books/v1/volumes?q=studying+languages';
+    const url = 'https://www.googleapis.com/books/v1/volumes?q=languages';
     const [books,addBooks] = useState([]);
     
     useEffect(() => {
@@ -18,7 +18,7 @@ const Education = (props) => {
 
     return (
         <Fragment>
-           <Loader exist={!!books.length} />
+           <Loader exist={!books.length} />
            <FlatList 
               data={books} 
               keyExtractor={(_el,i) => i.toString()} 
